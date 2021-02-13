@@ -37,8 +37,7 @@ public class Account {
     private double currency;
     @OneToOne(mappedBy = "account",cascade = CascadeType.ALL)
     private DebitCard debitCard;
-    @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)
-    private Set<Transaction> transaction;
+
 
     public AccountDto toAccountDto() {
         return AccountDto.builder()

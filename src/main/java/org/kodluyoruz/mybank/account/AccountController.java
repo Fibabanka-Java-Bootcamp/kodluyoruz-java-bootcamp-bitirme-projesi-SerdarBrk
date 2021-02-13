@@ -27,17 +27,18 @@ public class AccountController {
     }
 
     @GetMapping(params = {"customerId", "page", "size"})
-    public List<AccountDto> listByAuthor(@RequestParam("customerId") UUID customerId, @Min(value = 0) @RequestParam("page") int page, @RequestParam("size") int size) {
+    public List<AccountDto> listByCustomer(@RequestParam("customerId") UUID customerId, @Min(value = 0) @RequestParam("page") int page, @RequestParam("size") int size) {
 
         return accountService.list(customerId, PageRequest.of(page, size)).stream()
                 .map(Account::toAccountDto)
                 .collect(Collectors.toList());
     }
-    @PostMapping("/{accountId}/sendMoney")
-    public HttpStatus sendMoney(@RequestParam("senderIban") UUID senderIban,
+    @PostMapping("/sendMoney")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void sendMoney(@RequestParam("senderIban") UUID senderIban,
                                 @RequestParam("receiverIban") UUID receiverIban,
                                 @RequestParam("money") double money){
-        return this.accountService.sendMoney(senderIban,receiverIban,money);
+        this.accountService.sendMoney(senderIban,receiverIban,money);
     }
 
 

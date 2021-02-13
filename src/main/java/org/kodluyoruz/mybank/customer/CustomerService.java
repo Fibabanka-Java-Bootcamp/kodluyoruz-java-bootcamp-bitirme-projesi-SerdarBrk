@@ -38,16 +38,16 @@ public class CustomerService {
     }
 
 
-    public HttpStatus delete(UUID customerId){
+    public void delete(UUID customerId){
         Customer customer =this.customerRepo.findById(customerId)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found with id"+customerId));
         boolean hasCurrency=customer.getAccounts().stream().distinct().anyMatch(account -> account.getCurrency()!=0);
         boolean hasDebt=customer.getCreditCards().stream().distinct().anyMatch(creditCard -> creditCard.getDebt() !=0);
+
         if(hasCurrency || hasDebt)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"the customer's credit card debt or the customer's account has money.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"the customer's credit card has debt or the customer's account has money.");
         else{
             this.customerRepo.delete(customer);
-            return HttpStatus.ACCEPTED;
         }
 
     }

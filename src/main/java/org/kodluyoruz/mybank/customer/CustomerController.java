@@ -25,9 +25,9 @@ public class CustomerController {
         return this.customerService.create(customerDto.toCustomer()).toCustomerDto();
     }
     @DeleteMapping(params = {"customerId"})
-    public HttpStatus delete(@RequestParam("customerId") UUID customerId){
-
-        return this.customerService.delete(customerId);
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@RequestParam("customerId") UUID customerId){
+        this.customerService.delete(customerId);
     }
 
 

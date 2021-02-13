@@ -14,20 +14,18 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "account_card")
+@Table(name = "debitcard")
 public class DebitCard {
 
     @Id
     @GeneratedValue
     private UUID cardNumber;
-
     @OneToOne
     @JoinColumn(name = "account_id",referencedColumnName = "accountId")
     private Account account;
     private String password;
     private String ccv;
     private LocalDate expirationDate;
-
     @ManyToOne
     @JoinColumn(name="customer_id",referencedColumnName = "customerId")
     private Customer customer;

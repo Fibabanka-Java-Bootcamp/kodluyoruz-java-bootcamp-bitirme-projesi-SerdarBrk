@@ -3,9 +3,7 @@ package org.kodluyoruz.mybank.account;
 
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
@@ -14,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,17 +25,14 @@ public class AccountService {
 
     public Page<Account> list(UUID customerId, Pageable pageable){return this.accountRepo.findAllByCustomer_CustomerId(customerId,pageable);}
 
-    public Account updateCurrency(UUID accountId,double currency){
-        Account account=this.accountRepo.findByAccountId(accountId);
-        account.setCurrency(currency);
-        return accountRepo.save(account);
-    }
-
-    public HttpStatus sendMoney(UUID senderIban,UUID receiverIban,double money){
+    public void sendMoney(UUID senderIban,UUID receiverIban,double money){
         Account sender =this.accountRepo.findByIban(senderIban)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found with iban"+senderIban));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Sender account not found with iban: "+senderIban));
         Account receiver=this.accountRepo.findByIban(receiverIban)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found with iban"+receiverIban));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Receiver account not found with iban: "+receiverIban));
+
+        if(sender.getCurrency() < money)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is not enough money in the account");
 
         if(sender.getAccountType().equals(receiver.getAccountType())
                 && sender.getMoneyType().equals(receiver.getMoneyType())){
@@ -59,7 +53,6 @@ public class AccountService {
 
         this.accountRepo.save(receiver);
         this.accountRepo.save(sender);
-        return HttpStatus.OK;
     }
 
     public void delete(UUID accountId){this.accountRepo.delete(this.accountRepo.findByAccountId(accountId));}

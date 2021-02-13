@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "credit_card")
+@Table(name = "creditcard")
 public class CreditCard {
     @Id
     @GeneratedValue
