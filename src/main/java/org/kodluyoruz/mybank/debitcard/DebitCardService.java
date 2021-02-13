@@ -35,6 +35,8 @@ public class DebitCardService {
        DebitCard debitCard=this.debitCardRepo.findById(debitcardId)
                     .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"DebitCard not found with id"+debitcardId));
 
+        if (money<0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
        if(!debitCard.getPassword().equals(password))
            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password is incorrect");
 
@@ -44,42 +46,40 @@ public class DebitCardService {
        debitCard.getAccount().setCurrency(debitCard.getAccount().getCurrency()-money);
        return this.debitCardRepo.save(debitCard);
     }
-    public DebitCard putMoneyFromAtm(UUID debitcardId,String password,double money){
+    public DebitCard depositMoneyFromAtm(UUID debitcardId,String password,double money){
         DebitCard debitCard=this.debitCardRepo.findById(debitcardId)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"DebitCard not found with id"+debitcardId));
         if(!debitCard.getPassword().equals(password))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password is incorrect");
-        if (money > debitCard.getAccount().getCurrency())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is not enough money in the account");
+        if (money<0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
 
-
-
+        debitCard.getAccount().setCurrency(debitCard.getAccount().getCurrency()+money);
         return this.debitCardRepo.save(debitCard);
     }
 
     public DebitCard sendMoneyFromCard(UUID debitcardId,UUID receiverIban,String password,double money){
+
         DebitCard debitCard=this.debitCardRepo.findById(debitcardId)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"DebitCard not found with id"+debitcardId));
         Account receiverAccount=this.accountRepo.findByIban(receiverIban)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Receiver Account not found with iban"+receiverIban));
+        if (money<0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
         if(!debitCard.getPassword().equals(password))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password is incorrect");
-        if(debitCard.getAccount().getAccountType().equals(receiverAccount.getAccountType())
-                && debitCard.getAccount().getMoneyType().equals(receiverAccount.getMoneyType())){
+        if(debitCard.getAccount().getCurrency() < money)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is not enough credit in the creditcard");
+        RestTemplate restTemplate=new RestTemplate();
+        JSONObject jsonObject=new JSONObject(restTemplate
+                .getForObject("https://api.exchangeratesapi.io/latest?base="+debitCard.getAccount().getMoneyType().toString()
+                                +"&symbols="+receiverAccount.getMoneyType().toString(), String.class));
 
-            debitCard.getAccount().setCurrency(debitCard.getAccount().getCurrency()-money);
-            receiverAccount.setCurrency(receiverAccount.getCurrency()+money);
+        double rate=jsonObject.getJSONObject("rates").getDouble(receiverAccount.getMoneyType().toString());
 
-        }else{
-            RestTemplate restTemplate=new RestTemplate();
-            JSONObject jsonObject=new JSONObject(restTemplate
-                    .getForObject("https://api.exchangeratesapi.io/latest?base="+debitCard.getAccount().getMoneyType().toString()
-                            +"&symbols="+receiverAccount.getMoneyType().toString(), String.class));
+        debitCard.getAccount().setCurrency(debitCard.getAccount().getCurrency()-money);
+        receiverAccount.setCurrency(receiverAccount.getCurrency()+(rate*money));
 
-            double currency=jsonObject.getJSONObject("rates").getDouble(receiverAccount.getMoneyType().toString());
-            debitCard.getAccount().setCurrency(debitCard.getAccount().getCurrency()-(currency*money));
-            receiverAccount.setCurrency(receiverAccount.getCurrency()+(currency*money));
-        }
         this.accountRepo.save(receiverAccount);
         return this.debitCardRepo.save(debitCard);
     }

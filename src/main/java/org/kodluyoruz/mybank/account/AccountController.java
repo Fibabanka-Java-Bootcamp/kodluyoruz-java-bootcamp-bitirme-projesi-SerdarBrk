@@ -33,12 +33,12 @@ public class AccountController {
                 .map(Account::toAccountDto)
                 .collect(Collectors.toList());
     }
-    @PostMapping("/sendMoney")
+    @PostMapping("/{accountId}/sendMoney")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void sendMoney(@RequestParam("senderIban") UUID senderIban,
+    public AccountDto sendMoney(@PathVariable("accountId") UUID accountId,
                                 @RequestParam("receiverIban") UUID receiverIban,
                                 @RequestParam("money") double money){
-        this.accountService.sendMoney(senderIban,receiverIban,money);
+        return this.accountService.sendMoney(accountId,receiverIban,money).toAccountDto();
     }
 
 

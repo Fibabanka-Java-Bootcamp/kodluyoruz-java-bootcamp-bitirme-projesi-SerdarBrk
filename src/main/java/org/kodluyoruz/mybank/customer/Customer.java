@@ -7,6 +7,7 @@ import org.kodluyoruz.mybank.debitcard.DebitCard;
 import org.kodluyoruz.mybank.creditcard.CreditCard;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,7 +22,8 @@ public class Customer {
     @Id
     @GeneratedValue
     private UUID customerId;
-    @Column(unique = true,length = 11)
+    @Column(unique = true)
+    @Pattern(regexp = "^[0-9]{11}",message = "TC password length must be 4 and password contains only alphanumeric characters")
     private String tc;
     private String name;
     private String surname;
