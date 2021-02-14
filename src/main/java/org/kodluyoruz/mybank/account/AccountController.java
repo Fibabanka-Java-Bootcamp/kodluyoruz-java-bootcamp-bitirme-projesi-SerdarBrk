@@ -1,5 +1,6 @@
 package org.kodluyoruz.mybank.account;
 
+import org.json.JSONObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -26,9 +27,9 @@ public class AccountController {
         return this.accountService.create(accountDto.toAccount()).toAccountDto();
     }
 
-    @GetMapping(params = {"customerId", "page", "size"})
-    public List<AccountDto> listByCustomer(@RequestParam("customerId") UUID customerId, @Min(value = 0) @RequestParam("page") int page, @RequestParam("size") int size) {
 
+    @GetMapping("/listByCustomer")
+    public List<AccountDto> listByCustomer(@RequestParam("customerId") UUID customerId, @Min(value = 0) @RequestParam("page") int page, @RequestParam("size") int size) {
         return accountService.list(customerId, PageRequest.of(page, size)).stream()
                 .map(Account::toAccountDto)
                 .collect(Collectors.toList());
@@ -40,8 +41,6 @@ public class AccountController {
                                 @RequestParam("money") double money){
         return this.accountService.sendMoney(accountId,receiverIban,money).toAccountDto();
     }
-
-
     @DeleteMapping(params = {"accountId"})
     @ResponseStatus(HttpStatus.OK)
     public void delete(@RequestParam("accountId") UUID accountId){

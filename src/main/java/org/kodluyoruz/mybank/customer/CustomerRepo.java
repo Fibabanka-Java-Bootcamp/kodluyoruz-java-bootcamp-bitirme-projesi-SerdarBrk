@@ -14,7 +14,6 @@ public interface CustomerRepo extends CrudRepository<Customer, UUID> {
     Page<Customer> findAllByNameAndSurname(String name,String surname,Pageable pageable);
 
     Page<Customer> findAllByNameAndCreditCardsNotNull(String name,Pageable pageable);
-    Page<Customer> findAllByNameAndDebitCardsNotNull(String name,Pageable pageable);
     Page<Customer> findAllByNameAndAccountsNotNull(String name,Pageable pageable);
 
     Customer findByTc(String tc);

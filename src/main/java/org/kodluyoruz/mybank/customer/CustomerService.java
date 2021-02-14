@@ -30,9 +30,6 @@ public class CustomerService {
     public Page<Customer> listByNameAndCreditCardsNotNull(String name,Pageable pageable){
         return this.customerRepo.findAllByNameAndCreditCardsNotNull(name, pageable);
     }
-    public Page<Customer> listByNameAndDebitCardsNotNull(String name,Pageable pageable){
-        return this.customerRepo.findAllByNameAndDebitCardsNotNull(name, pageable);
-    }
     public Page<Customer> listByNameAndAccountsNotNull(String name,Pageable pageable){
         return this.customerRepo.findAllByNameAndAccountsNotNull(name, pageable);
     }

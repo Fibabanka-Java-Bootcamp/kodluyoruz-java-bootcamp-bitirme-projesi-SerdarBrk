@@ -21,13 +21,9 @@ public class CreditCard {
     private UUID cardNumber;
     private double credit;
     private double debt;
-    @Pattern(regexp ="^[0-9]{4}",message = "password length must be 4 and password contains only alphanumeric characters")
     private String password;
-    @Pattern(regexp ="^[0-9]{3}",message = "ccv length must be 3 and ccv contains only alphanumeric characters")
     private String ccv;
-    @Pattern(regexp = "^(1[0-2]|0[1-9])$",message = "")
     private String expirationMonth;
-    @Pattern(regexp = "^(20[2-9][0-9])$",message = "")
     private String expirationYear;
 
     @ManyToOne

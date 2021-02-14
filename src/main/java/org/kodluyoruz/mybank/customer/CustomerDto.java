@@ -1,10 +1,9 @@
 package org.kodluyoruz.mybank.customer;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-import org.kodluyoruz.mybank.address.Address;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @Data
@@ -13,16 +12,16 @@ public class CustomerDto {
 
     private UUID customerId;
     @NotBlank(message = "TC for the customer is mandatory")
-    @Length(min = 11,max = 11,message = "TC must have 11 digits")
+    @Pattern(regexp = "^[0-9]{11}",message = "TC  length must be 11 and TC contains only alphanumeric characters.")
     private String tc;
     @NotBlank(message = "Name for the customer is mandatory")
     private String name;
     @NotBlank(message = "Surname for the customer is mandatory")
     private String surname;
-    @NotBlank(message = "Phone number for the customer is mandatory,Ex:05xxxxxxxxx")
-    @Length(min = 11,max = 11,message = "Phone number must have 11 digits")
+    @NotBlank(message = "PhoneNumber for the customer is mandatory. Ex:+(123)-456-78-90")
+    @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$",message = "Ex:+(123)-456-78-90")
     private String phoneNumber;
-    private Address address;
+
 
     public Customer toCustomer() {
         return Customer.builder()
@@ -31,7 +30,6 @@ public class CustomerDto {
                 .name(this.name)
                 .surname(this.surname)
                 .phoneNumber(this.phoneNumber)
-                .address(this.address)
                 .build();
     }
 

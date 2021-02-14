@@ -12,9 +12,7 @@ public class AccountDto {
     private UUID accountId;
     private UUID iban;
     private CustomerDto customer;
-
     private AccountType accountType;
-
     private MoneyType moneyType;
     private double currency;
 

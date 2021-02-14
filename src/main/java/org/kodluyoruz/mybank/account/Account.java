@@ -1,13 +1,11 @@
 package org.kodluyoruz.mybank.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.kodluyoruz.mybank.debitcard.DebitCard;
 import org.kodluyoruz.mybank.customer.Customer;
-import org.kodluyoruz.mybank.transaction.Transaction;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -35,6 +33,7 @@ public class Account {
     @Enumerated(value = EnumType.STRING)
     private MoneyType moneyType;
     private double currency;
+    @JsonIgnore
     @OneToOne(mappedBy = "account",cascade = CascadeType.ALL)
     private DebitCard debitCard;
 

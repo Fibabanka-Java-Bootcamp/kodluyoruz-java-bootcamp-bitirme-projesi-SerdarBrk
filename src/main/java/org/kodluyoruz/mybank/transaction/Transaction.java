@@ -23,4 +23,13 @@ public class Transaction {
     private String explanation;
     private LocalDate transactionDate;
 
+    public TransactionDto toTransactionDto(){
+        return TransactionDto.builder()
+                .id(this.id)
+                .performedId(this.performedId)
+                .transactionType(this.transactionType)
+                .explanation(this.explanation)
+                .transactionDate(this.transactionDate)
+                .build();
+    }
 }
