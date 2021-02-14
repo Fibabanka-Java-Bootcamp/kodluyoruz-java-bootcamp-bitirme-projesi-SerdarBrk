@@ -29,17 +29,20 @@ public class DebitCardController {
     }
 
     @PostMapping("{debitcardNumber}/updateAccount")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public DebitCardDto updateAccount(@PathVariable("debitcardNumber")UUID debitcardNumber,
                                       @RequestParam("accountId") UUID accountId){
         return this.debitCardService.updateAccount(debitcardNumber, accountId).toDebitCardDto();
     }
     @PostMapping( "{debitcardNumber}/updatePassword")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public DebitCardDto updatePassword(@PathVariable("debitcardNumber")UUID debitcardNumber,
                                        @Pattern(regexp = "^[0-9]{4}",message = "password length must be 4 and password contains only alphanumeric characters")
                                        @RequestParam("password") String password){
         return this.debitCardService.updatePassword(debitcardNumber, password).toDebitCardDto();
     }
     @PostMapping("/withdrawlMoneyFromAtm")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public DebitCardDto withdrawlMoneyFromAtm(@RequestParam("debitcardNumber") UUID debitcardNumber,
                                               @RequestParam("password") String password,
                                               @Min(value = 10,message = "least 10.")
@@ -47,6 +50,7 @@ public class DebitCardController {
         return this.debitCardService.withdrawlMoneyFromAtm(debitcardNumber, password, money).toDebitCardDto();
     }
     @PostMapping("/depositMoneyFromAtm")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public DebitCardDto depositMoneyFromAtm(@RequestParam("debitcardNumber") UUID debitcardNumber,
                                             @RequestParam("password") String password,
                                             @Min(value = 10,message = "least 10.")
@@ -54,6 +58,7 @@ public class DebitCardController {
         return this.debitCardService.depositMoneyFromAtm(debitcardNumber, password, money).toDebitCardDto();
     }
     @PostMapping("/shopping")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public DebitCardDto shopping(@RequestParam("debitcardNumber") UUID debitcardNumber,
                                  @RequestParam("receiverIban") UUID receiverIban,
                                  @RequestParam("password") String password,
