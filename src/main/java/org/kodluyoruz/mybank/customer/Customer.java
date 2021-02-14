@@ -20,6 +20,7 @@ import java.util.UUID;
 @Table(name = "customer")
 public class Customer {
     @Id
+    @GeneratedValue
     private UUID customerId;
     @Column(unique = true)
     private String tc;
