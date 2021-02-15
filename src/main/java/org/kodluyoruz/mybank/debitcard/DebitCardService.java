@@ -72,6 +72,7 @@ public class DebitCardService {
 
        this.transactionRepo.save(transactionAccount);
        this.transactionRepo.save(transactionDebitCard);
+       this.accountRepo.save(debitCard.getAccount());
        return this.debitCardRepo.save(debitCard);
     }
     public DebitCard depositMoneyFromAtm(UUID debitcardNumber,String password,double money){
@@ -98,6 +99,7 @@ public class DebitCardService {
 
         this.transactionRepo.save(transactionAccount);
         this.transactionRepo.save(transactionDebitCard);
+        this.accountRepo.save(debitCard.getAccount());
         return this.debitCardRepo.save(debitCard);
     }
 
@@ -145,6 +147,7 @@ public class DebitCardService {
         this.transactionRepo.save(transactionDebitCard);
         this.transactionRepo.save(transactionReceiverAccount);
 
+        this.accountRepo.save(debitCard.getAccount());
         this.accountRepo.save(receiverAccount);
         return this.debitCardRepo.save(debitCard);
     }
@@ -198,6 +201,7 @@ public class DebitCardService {
         this.transactionRepo.save(transactionDebitCard);
         this.transactionRepo.save(transactionReceiverAccount);
 
+        this.accountRepo.save(debitCard.getAccount());
         this.accountRepo.save(receiverAccount);
         return this.debitCardRepo.save(debitCard);
     }
