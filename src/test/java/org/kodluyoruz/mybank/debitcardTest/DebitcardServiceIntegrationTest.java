@@ -29,7 +29,7 @@ public class DebitcardServiceIntegrationTest {
     public void create(){
         DebitCard debitCard= DebitCardDto.builder()
                 .account(accountService.get(UUID.fromString("d3b88114-673e-481b-beee-e8fe4f49c8b2"))
-                        .get())
+                        .get().toAccountDto())
                 .password("1234")
                 .ccv("324")
                 .expirationMonth("05")

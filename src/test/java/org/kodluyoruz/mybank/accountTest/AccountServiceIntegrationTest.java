@@ -78,7 +78,7 @@ public class AccountServiceIntegrationTest {
     @Test
     @Order(5)
     public void get(){
-        UUID id=UUID.fromString("f5884081-d4b5-4a62-ba88-f19f6fc902ad");
+        UUID id=UUID.fromString("0bd0fb85-b010-4c0c-922b-774f62340d66");
         assertNotNull(accountService.get(id));
     }
 

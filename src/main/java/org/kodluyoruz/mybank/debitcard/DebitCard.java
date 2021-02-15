@@ -23,7 +23,6 @@ public class DebitCard {
     private UUID cardNumber;
     @OneToOne
     @JoinColumn(name = "account_id",referencedColumnName = "accountId")
-    @JsonIgnore
     private Account account;
     private String password;
     private String ccv;
@@ -33,7 +32,7 @@ public class DebitCard {
     public DebitCardDto toDebitCardDto(){
         return DebitCardDto.builder()
                 .cardNumber(this.cardNumber)
-                .account(this.account)
+                .account(this.account.toAccountDto())
                 .password(this.password)
                 .ccv(this.ccv)
                 .expirationMonth(this.expirationMonth)

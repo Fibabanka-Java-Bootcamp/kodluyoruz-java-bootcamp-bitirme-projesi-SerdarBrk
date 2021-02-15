@@ -65,20 +65,20 @@ public class DebitCardController {
                                  @RequestParam("money") double money){
         return this.debitCardService.shopping(debitcardNumber, receiverIban, password, money).toDebitCardDto();
     }
-    @PostMapping(value = "/onlineShopping",params = {"receiverAccountId","debitcardNumber","password","ccv","expirationMonth","expirationYear","money"})
+    @PostMapping(value = "/onlineShopping",params = {"receiverIban","debitcardNumber","password","ccv","expirationMonth","expirationYear","money"})
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public DebitCardDto onlineShopping(@RequestParam("receiverAccountId") UUID receiverAccountId,
+    public DebitCardDto onlineShopping(@RequestParam("receiverIban") UUID receiverIban,
                                         @RequestParam("debitcardNumber") UUID debitcardNumber,
                                         @RequestParam("password") String password,
                                         @RequestParam("ccv") String ccv,
                                         @RequestParam("expirationMonth") String expirationMonth,
                                         @RequestParam("expirationYear") String expirationYear,
                                         @RequestParam("money") double money){
-        return this.debitCardService.onlineShopping(receiverAccountId, debitcardNumber, password,
+        return this.debitCardService.onlineShopping(receiverIban, debitcardNumber, password,
                 ccv, expirationMonth, expirationYear, money).toDebitCardDto();
     }
 
-    @DeleteMapping
+    @DeleteMapping(params = {"debitcardNumber"})
     @ResponseStatus(HttpStatus.OK)
     public void delete(@RequestParam("debitcardNumber") UUID debitcardNumber){
         this.debitCardService.delete(debitcardNumber);
