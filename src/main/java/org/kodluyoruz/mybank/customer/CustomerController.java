@@ -28,7 +28,7 @@ public class CustomerController {
     @PostMapping("/{customerId}/updatePhone")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public CustomerDto updatePhone(@PathVariable("customerId") UUID customerId,
-                                   @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$",message = "Ex:+(123)-456-78-90")
+                                   @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$",message = "Phone Number Ex:+(123)-456-78-90")
                                    @RequestParam("phoneNumber") String phoneNumber){
         return this.customerService.updatePhone(customerId, phoneNumber).toCustomerDto();
     }

@@ -19,7 +19,7 @@ public class CustomerDto {
     @NotBlank(message = "Surname for the customer is mandatory")
     private String surname;
     @NotBlank(message = "PhoneNumber for the customer is mandatory. Ex:+(123)-456-78-90")
-    @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$",message = "Ex:+(123)-456-78-90")
+    @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$",message = "PhoneNumber Ex:+(123)-456-78-90")
     private String phoneNumber;
 
 
