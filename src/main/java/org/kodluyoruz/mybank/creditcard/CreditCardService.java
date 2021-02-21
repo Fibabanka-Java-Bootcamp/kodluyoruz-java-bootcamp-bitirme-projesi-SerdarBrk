@@ -40,6 +40,8 @@ public class CreditCardService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password is incorrect");
         if (money<0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
+        if(creditCard.getDebt()<=0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is no debt");
         creditCard.setDebt(creditCard.getDebt()-money);
         Transaction transactionCreditCard=new Transaction();
         transactionCreditCard.setPerformedId(creditcardNumber);
@@ -55,12 +57,19 @@ public class CreditCardService {
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Creditcard not found with number: "+creditcardNumber));
         Account account=this.accountRepo.findById(accountId)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found with accountId: "+accountId));
+        if(creditCard.getDebt()<=0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is no debt");
         if (money<0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
         if(account.getCurrency() < money)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is not enough money in the account");
+        RestTemplate restTemplate=new RestTemplate();
+        JSONObject jsonObject=new JSONObject(restTemplate.getForObject("https://api.exchangeratesapi.io/latest?base="+account.getMoneyType().toString()
+                +"&symbols=", String.class));
+        double rate=jsonObject.getJSONObject("rates").getDouble("TRY");
+
         account.setCurrency(account.getCurrency()-money);
-        creditCard.setDebt(creditCard.getDebt()-money);
+        creditCard.setDebt(creditCard.getDebt()-(money*rate));
 
         Transaction transactionAccount=new Transaction();
         transactionAccount.setPerformedId(accountId);
@@ -91,9 +100,9 @@ public class CreditCardService {
         if(!creditCard.getPassword().equals(password))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password is incorrect");
         RestTemplate restTemplate=new RestTemplate();
-        JSONObject jsonObject=new JSONObject(restTemplate.getForObject("https://api.exchangeratesapi.io/latest?base=TRY&symbols="
-                +receiver.getMoneyType().toString(), String.class));
-        double rate=jsonObject.getJSONObject("rates").getDouble(receiver.getMoneyType().toString());
+        JSONObject jsonObject=new JSONObject(restTemplate.getForObject("https://api.exchangeratesapi.io/latest?base="+receiver.getMoneyType().toString()+"&symbols=TRY"
+                , String.class));
+        double rate=jsonObject.getJSONObject("rates").getDouble("TRY");
         if((creditCard.getCredit()-creditCard.getDebt()) < rate*money)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is not enough credit in the creditcard");
         receiver.setCurrency(receiver.getCurrency()+(money));
@@ -136,9 +145,9 @@ public class CreditCardService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Expirationyear is incorrect.");
         }
         RestTemplate restTemplate=new RestTemplate();
-        JSONObject jsonObject=new JSONObject(restTemplate.getForObject("https://api.exchangeratesapi.io/latest?base=TRY&symbols="
-                +receiver.getMoneyType().toString(), String.class));
-        double rate=jsonObject.getJSONObject("rates").getDouble(receiver.getMoneyType().toString());
+        JSONObject jsonObject=new JSONObject(restTemplate.getForObject("https://api.exchangeratesapi.io/latest?base="+receiver.getMoneyType().toString()+"&symbols=TRY"
+                , String.class));
+        double rate=jsonObject.getJSONObject("rates").getDouble("TRY");
         if((creditCard.getCredit()-creditCard.getDebt()) < rate*money)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is not enough credit in the creditcard");
         receiver.setCurrency(receiver.getCurrency()+(money));
@@ -177,9 +186,8 @@ public class CreditCardService {
     public CreditCard updateCredit(UUID creditcardNumber,double credit){
         CreditCard creditCard=this.creditCardRepo.findById(creditcardNumber)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Creditcard not found with number: "+creditcardNumber));
-        if(creditCard.getDebt()>0)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Dept is not 0.Creditcard cannot be updated.");
-
+        if(creditCard.getDebt()>credit)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Dept is greater than credit.Creditcard cannot be updated.");
 
         creditCard.setCredit(credit);
         return this.creditCardRepo.save(creditCard);

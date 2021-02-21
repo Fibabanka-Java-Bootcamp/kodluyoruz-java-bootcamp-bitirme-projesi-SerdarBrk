@@ -1,14 +1,10 @@
 package org.kodluyoruz.mybank.account;
 
-
-
-
 import org.json.JSONObject;
 import org.kodluyoruz.mybank.transaction.Transaction;
 import org.kodluyoruz.mybank.transaction.TransactionRepo;
 import org.kodluyoruz.mybank.transaction.TransactionType;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -82,14 +78,17 @@ public class AccountService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is money in the account. Account cannot be deleted");
         this.accountRepo.delete(account);
         List<Transaction> transactions=this.transactionRepo.findAllByPerformedId(accountId);
+        if(account.getDebitCard() != null)
+        {
+            RestTemplate restTemplate=new RestTemplate();
+            restTemplate.delete("http://localhost:8080/api/debitCard?debitcardNumber="+ account.getDebitCard().getCardNumber());
+        }
+
         if(transactions != null){
             this.transactionRepo.deleteAll(transactions);
         }
     }
 
-
     public Optional<Account> get(UUID accountId){return this.accountRepo.findById(accountId);}
-
-
 
 }

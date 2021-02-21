@@ -35,7 +35,7 @@ public class CreditCardController {
         return this.creditCardService.payDeptFromAtm(creditcardNumber, password, money).toCreditCardDto();
     }
 
-    @PostMapping(value = "/payDeptFromAtm",params = {"accountId","creditcardNumber","money"})
+    @PostMapping(value = "/payDeptFromAccount",params = {"accountId","creditcardNumber","money"})
     @ResponseStatus(HttpStatus.ACCEPTED)
     public CreditCardDto payDeptFromAccount(@RequestParam("accountId")UUID accountId,
                                         @RequestParam("creditcardNumber") UUID creditcardNumber,
@@ -43,25 +43,25 @@ public class CreditCardController {
         return this.creditCardService.payDebtFromAccount(accountId, creditcardNumber, money).toCreditCardDto();
     }
 
-    @PostMapping(value = "/shopping",params = {"receiverAccountId","creditcardNumber","password","money"})
+    @PostMapping(value = "/shopping",params = {"receiverAccountIban","creditcardNumber","password","money"})
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public CreditCardDto shopping(@RequestParam("receiverAccountId")UUID receiverAccountId,
+    public CreditCardDto shopping(@RequestParam("receiverAccountIban")UUID receiverAccountIban,
                                             @RequestParam("creditcardNumber") UUID creditcardNumber,
                                             @RequestParam("password") String password,
                                             @RequestParam("money") double money){
-        return this.creditCardService.shopping(receiverAccountId, creditcardNumber, password, money).toCreditCardDto();
+        return this.creditCardService.shopping(receiverAccountIban, creditcardNumber, password, money).toCreditCardDto();
     }
 
-    @PostMapping(value = "/onlineShopping",params = {"receiverAccountId","creditcardNumber","password","ccv","expirationMonth","expirationYear","money"})
+    @PostMapping(value = "/onlineShopping",params = {"receiverAccountIban","creditcardNumber","password","ccv","expirationMonth","expirationYear","money"})
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public CreditCardDto onlineShopping(@RequestParam("receiverAccountId") UUID receiverAccountId,
+    public CreditCardDto onlineShopping(@RequestParam("receiverAccountIban") UUID receiverAccountIban,
                                         @RequestParam("creditcardNumber") UUID creditcardNumber,
                                         @RequestParam("password") String password,
                                         @RequestParam("ccv") String ccv,
                                         @RequestParam("expirationMonth") String expirationMonth,
                                         @RequestParam("expirationYear") String expirationYear,
                                         @RequestParam("money") double money){
-        return this.creditCardService.onlineShopping(receiverAccountId, creditcardNumber, password,
+        return this.creditCardService.onlineShopping(receiverAccountIban, creditcardNumber, password,
                 ccv, expirationMonth, expirationYear, money).toCreditCardDto();
     }
     @GetMapping("{creditcardNumber}/hasDept")
@@ -69,7 +69,7 @@ public class CreditCardController {
         return this.creditCardService.hasDebt(creditcardNumber);
     }
 
-    @PostMapping("{creditcardNumber}/updateCredit")
+    @PostMapping(value = "{creditcardNumber}/updateCredit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public CreditCardDto updateCredit(@PathVariable("creditcardNumber") UUID creditcardNumber,
                                       @Min(value=100, message = "Card credit cannot be lower than 100")

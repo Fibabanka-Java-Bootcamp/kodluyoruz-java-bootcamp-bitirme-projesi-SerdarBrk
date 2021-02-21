@@ -4,8 +4,6 @@ import lombok.*;
 import org.kodluyoruz.mybank.customer.Customer;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter

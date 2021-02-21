@@ -117,7 +117,7 @@ public class DebitcardControllerIntegrationTest {
     @Test
     @Order(9)
     public void delete(){
-        restTemplate.delete("http://localhost:" + portNo + "/api/debitCard?debitcardNumber=3750f985-3ff6-4c9c-ad63-074083cb565e");
+        this.restTemplate.delete("http://localhost:" + portNo + "/api/debitCard?debitcardNumber=35617ff4-9208-4921-87cf-6c69e72ee3b2");
     }
 
 }

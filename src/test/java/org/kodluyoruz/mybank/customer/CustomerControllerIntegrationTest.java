@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestPropertySource({ "classpath:application.properties" })
 public class CustomerControllerIntegrationTest {
 
+
     @LocalServerPort
     private int portNo;
 

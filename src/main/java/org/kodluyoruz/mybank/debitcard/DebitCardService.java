@@ -210,6 +210,7 @@ public class DebitCardService {
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND
                         ,"Debitcard not found with number: "+debitcardNumber));
 
+
         this.debitCardRepo.delete(debitCard);
         List<Transaction> transactions=this.transactionRepo.findAllByPerformedId(debitcardNumber);
         if(transactions != null){

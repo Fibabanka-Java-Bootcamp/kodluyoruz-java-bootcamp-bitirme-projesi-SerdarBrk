@@ -34,7 +34,7 @@ public class Account {
     private MoneyType moneyType;
     private double currency;
     @JsonIgnore
-    @OneToOne(mappedBy = "account",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "account",cascade = CascadeType.REMOVE)
     private DebitCard debitCard;
 
 
