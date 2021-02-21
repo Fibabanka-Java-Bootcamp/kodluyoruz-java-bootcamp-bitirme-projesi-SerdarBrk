@@ -18,11 +18,10 @@ import java.util.UUID;
 public class Account {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID accountId;
 
-    @Column(unique = true)
-    @GeneratedValue
+    @Column(unique = true,nullable = false)
     private UUID iban;
 
     @ManyToOne
