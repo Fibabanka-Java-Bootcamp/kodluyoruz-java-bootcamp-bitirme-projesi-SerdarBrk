@@ -31,6 +31,7 @@ public class CreditCardController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public CreditCardDto payDeptFromAtm(@RequestParam("creditcardNumber")UUID creditcardNumber,
                                         @RequestParam("password") String password,
+                                        @Min(value = 0,message = "Money cannot be less than 0")
                                         @RequestParam("money") double money){
         return this.creditCardService.payDeptFromAtm(creditcardNumber, password, money).toCreditCardDto();
     }

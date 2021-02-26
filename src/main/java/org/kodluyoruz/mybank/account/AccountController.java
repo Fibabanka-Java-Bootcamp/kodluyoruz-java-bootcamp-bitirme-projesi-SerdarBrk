@@ -38,6 +38,7 @@ public class AccountController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public AccountDto sendMoney(@PathVariable("accountId") UUID accountId,
                                 @RequestParam("receiverIban") UUID receiverIban,
+                                @Min(value = 0,message = "money cannot be less than 0")
                                 @RequestParam("money") double money){
         return this.accountService.sendMoney(accountId,receiverIban,money).toAccountDto();
     }

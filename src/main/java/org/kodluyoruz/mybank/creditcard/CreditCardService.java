@@ -38,14 +38,14 @@ public class CreditCardService {
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Creditcard not found with number: "+creditcardNumber));
         if(!creditCard.getPassword().equals(password))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password is incorrect");
-        if (money<0)
+        if (money<=0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
         if(creditCard.getDebt()<=0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is no debt");
         creditCard.setDebt(creditCard.getDebt()-money);
         Transaction transactionCreditCard=new Transaction();
         transactionCreditCard.setPerformedId(creditcardNumber);
-        transactionCreditCard.setTransactionType(TransactionType.PAY_DEBT);
+        transactionCreditCard.setTransactionType(TransactionType.PAYDEBT_CREDITCARD);
         transactionCreditCard.setExplanation("Pay debt from ATM, Money: "+money);
         transactionCreditCard.setTransactionDate(LocalDate.now());
         this.transactionRepo.save(transactionCreditCard);
@@ -59,7 +59,7 @@ public class CreditCardService {
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found with accountId: "+accountId));
         if(creditCard.getDebt()<=0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is no debt");
-        if (money<0)
+        if (money<=0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
         if(account.getCurrency() < money)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There is not enough money in the account");
@@ -73,13 +73,13 @@ public class CreditCardService {
 
         Transaction transactionAccount=new Transaction();
         transactionAccount.setPerformedId(accountId);
-        transactionAccount.setTransactionType(TransactionType.PAY_DEBT);
+        transactionAccount.setTransactionType(TransactionType.PAYDEBT_ACCOUNT);
         transactionAccount.setExplanation("CreditCard Number: "+creditcardNumber+",Money: "+money);
         transactionAccount.setTransactionDate(LocalDate.now());
 
         Transaction transactionCreditCard=new Transaction();
         transactionCreditCard.setPerformedId(creditcardNumber);
-        transactionCreditCard.setTransactionType(TransactionType.PAY_DEBT);
+        transactionCreditCard.setTransactionType(TransactionType.PAYDEBT_CREDITCARD);
         transactionCreditCard.setExplanation("Sender Account Id: "+accountId+",Money: "+money);
         transactionCreditCard.setTransactionDate(LocalDate.now());
 
@@ -95,7 +95,7 @@ public class CreditCardService {
         Account receiver=this.accountRepo.findByIban(receiverAccountIban)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Receiver account not found with iban: "+receiverAccountIban));
 
-        if (money<0)
+        if (money<=0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
         if(!creditCard.getPassword().equals(password))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password is incorrect");
@@ -116,7 +116,7 @@ public class CreditCardService {
 
         Transaction transactionCreditCard=new Transaction();
         transactionCreditCard.setPerformedId(creditcardNumber);
-        transactionCreditCard.setTransactionType(TransactionType.SHOPPING);
+        transactionCreditCard.setTransactionType(TransactionType.SHOPPING_CREDITCARD);
         transactionCreditCard.setExplanation("Receiver Account IBAN: "+receiverAccountIban+",Money: "+money);
         transactionCreditCard.setTransactionDate(LocalDate.now());
 
@@ -128,6 +128,8 @@ public class CreditCardService {
 
     public CreditCard onlineShopping(UUID receiverIban,UUID creditcardNumber,String password
             ,String ccv, String expirationMonth,String expirationYear,double money){
+        if (money<=0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Money must be greater than 0: "+money);
         Account receiver =this.accountRepo.findByIban(receiverIban)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Receiver Account not found with iban: "+receiverIban));
         CreditCard creditCard = this.creditCardRepo.findById(creditcardNumber)
@@ -161,7 +163,7 @@ public class CreditCardService {
 
         Transaction transactionCreditCard=new Transaction();
         transactionCreditCard.setPerformedId(creditcardNumber);
-        transactionCreditCard.setTransactionType(TransactionType.SHOPPING);
+        transactionCreditCard.setTransactionType(TransactionType.SHOPPING_CREDITCARD);
         transactionCreditCard.setExplanation("OnlineShopping, Receiver Account IBAN: "+receiverIban+",Money: "+money);
         transactionCreditCard.setTransactionDate(LocalDate.now());
 

@@ -3,6 +3,7 @@ package org.kodluyoruz.mybank.account;
 import lombok.*;
 import org.kodluyoruz.mybank.customer.CustomerDto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ public class AccountDto {
     private CustomerDto customer;
     private AccountType accountType;
     private MoneyType moneyType;
+    @Min(value = 0,message = "currency cannot be less than 0")
     private double currency;
 
     public Account toAccount() {

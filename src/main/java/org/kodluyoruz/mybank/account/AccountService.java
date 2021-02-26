@@ -52,6 +52,8 @@ public class AccountService {
         sender.setCurrency(sender.getCurrency()-(money));
         receiver.setCurrency(receiver.getCurrency()+(rate*money));
 
+
+
         Transaction transactionSender=new Transaction();
         transactionSender.setPerformedId(sender.getAccountId());
         transactionSender.setTransactionType(TransactionType.TRANSFER);

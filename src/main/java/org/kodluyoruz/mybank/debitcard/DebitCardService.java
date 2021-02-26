@@ -60,13 +60,13 @@ public class DebitCardService {
        debitCard.getAccount().setCurrency(debitCard.getAccount().getCurrency()-money);
        Transaction transactionAccount=new Transaction();
        transactionAccount.setPerformedId(debitCard.getAccount().getAccountId());
-       transactionAccount.setTransactionType(TransactionType.WITHDRAWAL);
+       transactionAccount.setTransactionType(TransactionType.WITHDRAWAL_ACCOUNT);
        transactionAccount.setExplanation("Withdrawl money from ATM, Money: "+money);
        transactionAccount.setTransactionDate(LocalDate.now());
 
        Transaction transactionDebitCard=new Transaction();
        transactionDebitCard.setPerformedId(debitcardNumber);
-       transactionDebitCard.setTransactionType(TransactionType.WITHDRAWAL);
+       transactionDebitCard.setTransactionType(TransactionType.WITHDRAWAL_DEBITCARD);
        transactionDebitCard.setExplanation("Withdrawl money from ATM, Money: "+money);
        transactionDebitCard.setTransactionDate(LocalDate.now());
 
@@ -87,13 +87,13 @@ public class DebitCardService {
 
         Transaction transactionAccount=new Transaction();
         transactionAccount.setPerformedId(debitCard.getAccount().getAccountId());
-        transactionAccount.setTransactionType(TransactionType.DEPOSIT);
+        transactionAccount.setTransactionType(TransactionType.DEPOSIT_ACCOUNT);
         transactionAccount.setExplanation("DEPOSIT from ATM, Money: "+money);
         transactionAccount.setTransactionDate(LocalDate.now());
 
         Transaction transactionDebitCard=new Transaction();
         transactionDebitCard.setPerformedId(debitcardNumber);
-        transactionDebitCard.setTransactionType(TransactionType.DEPOSIT);
+        transactionDebitCard.setTransactionType(TransactionType.DEPOSIT_DEBITCARD);
         transactionDebitCard.setExplanation("DEPOSIT from ATM, Money: "+money);
         transactionDebitCard.setTransactionDate(LocalDate.now());
 
@@ -127,13 +127,13 @@ public class DebitCardService {
 
         Transaction transactionAccount=new Transaction();
         transactionAccount.setPerformedId(debitCard.getAccount().getAccountId());
-        transactionAccount.setTransactionType(TransactionType.SHOPPING);
+        transactionAccount.setTransactionType(TransactionType.SHOPPING_ACCOUNT);
         transactionAccount.setExplanation("Receiver IBAN: "+receiverIban+", Money: "+money);
         transactionAccount.setTransactionDate(LocalDate.now());
 
         Transaction transactionDebitCard=new Transaction();
         transactionDebitCard.setPerformedId(debitcardNumber);
-        transactionDebitCard.setTransactionType(TransactionType.SHOPPING);
+        transactionDebitCard.setTransactionType(TransactionType.SHOPPING_DEBITCARD);
         transactionDebitCard.setExplanation("Receiver IBAN: "+receiverIban+", Money: "+money);
         transactionDebitCard.setTransactionDate(LocalDate.now());
 
@@ -181,13 +181,13 @@ public class DebitCardService {
 
         Transaction transactionAccount=new Transaction();
         transactionAccount.setPerformedId(debitCard.getAccount().getAccountId());
-        transactionAccount.setTransactionType(TransactionType.SHOPPING);
+        transactionAccount.setTransactionType(TransactionType.SHOPPING_ACCOUNT);
         transactionAccount.setExplanation("OnlineShopping,Receiver IBAN: "+receiverIban+", Money: "+money);
         transactionAccount.setTransactionDate(LocalDate.now());
 
         Transaction transactionDebitCard=new Transaction();
         transactionDebitCard.setPerformedId(debitcardNumber);
-        transactionDebitCard.setTransactionType(TransactionType.SHOPPING);
+        transactionDebitCard.setTransactionType(TransactionType.SHOPPING_DEBITCARD);
         transactionDebitCard.setExplanation("OnlineShopping,Receiver IBAN: "+receiverIban+", Money: "+money);
         transactionDebitCard.setTransactionDate(LocalDate.now());
 

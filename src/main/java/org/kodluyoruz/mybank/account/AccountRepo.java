@@ -11,4 +11,5 @@ public interface AccountRepo extends CrudRepository<Account, UUID> {
     Page<Account> findAllByCustomer_CustomerId(UUID customerId,Pageable pageable);
     Optional<Account> findByIban(UUID iban);
 
+
 }
