@@ -1,5 +1,6 @@
 package org.kodluyoruz.mybank.creditcard;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -66,7 +67,7 @@ public class CreditCardController {
                 ccv, expirationMonth, expirationYear, money).toCreditCardDto();
     }
     @GetMapping("{creditcardNumber}/hasDept")
-    public JSONObject hasDept(@PathVariable("creditcardNumber") UUID creditcardNumber){
+    public ObjectNode hasDept(@PathVariable("creditcardNumber") UUID creditcardNumber){
         return this.creditCardService.hasDebt(creditcardNumber);
     }
 

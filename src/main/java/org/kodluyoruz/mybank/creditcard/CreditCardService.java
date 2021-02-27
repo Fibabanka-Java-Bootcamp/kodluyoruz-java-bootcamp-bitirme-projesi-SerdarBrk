@@ -1,5 +1,7 @@
 package org.kodluyoruz.mybank.creditcard;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.json.JSONObject;
 import org.kodluyoruz.mybank.account.Account;
 import org.kodluyoruz.mybank.account.AccountRepo;
@@ -173,16 +175,16 @@ public class CreditCardService {
         return this.creditCardRepo.save(creditCard);
 
     }
-    public JSONObject hasDebt(UUID creditcardNumber){
+    public ObjectNode hasDebt(UUID creditcardNumber){
         CreditCard creditCard=this.creditCardRepo.findById(creditcardNumber)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND
                         ,"Creditcard not found with number: "+creditcardNumber));
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("id",creditcardNumber.toString());
-        jsonObject.put("limit",creditCard.getCredit());
-        jsonObject.put("debt",creditCard.getDebt());
-        jsonObject.put("available",(creditCard.getCredit()-creditCard.getDebt()));
-        return  jsonObject;
+        ObjectNode objectNode=new ObjectNode(JsonNodeFactory.instance);
+        objectNode.put("id",creditcardNumber.toString());
+        objectNode.put("limit",creditCard.getCredit());
+        objectNode.put("debt",creditCard.getDebt());
+        objectNode.put("available",(creditCard.getCredit()-creditCard.getDebt()));
+        return  objectNode;
     }
 
     public CreditCard updateCredit(UUID creditcardNumber,double credit){

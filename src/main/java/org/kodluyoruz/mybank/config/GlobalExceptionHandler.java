@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
@@ -28,7 +29,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         body.put("status", status.value());
 
-        //Get all errors
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -37,6 +37,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         body.put("errors", errors);
 
-        return ResponseEntity.status(404).body(body);
+        return ResponseEntity.status(400).body(body);
     }
 }
